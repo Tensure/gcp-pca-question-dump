@@ -1,9 +1,9 @@
 const getAllTests = () => {
-  const context = require.context("./quizes", true, /.json$/);
+  const context = require.context("./quizzes", true, /.json$/);
   const all = {};
   context.keys().forEach((key) => {
     const fileName = key.replace("./", "");
-    const resource = require(`./quizes/${fileName}`);
+    const resource = require(`./quizzes/${fileName}`);
     const namespace = fileName.replace(".json", "");
     all[namespace] = JSON.parse(JSON.stringify(resource));
   });
