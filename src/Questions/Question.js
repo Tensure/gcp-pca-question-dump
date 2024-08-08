@@ -15,11 +15,27 @@ const Question = ({
 
   const [showAnswer, setShowAnswer] = useState(false);
   const [answersIndex, setAnswersIndex] = useState([]);
+  const [options, setOptions] = useState(prompt.answers);
+  const originalOptions = prompt.answers;
+
+  useEffect(() => {
+    const shuffledArr = originalOptions
+      .map((value) => ({ value, sort: Math.random() }))
+      .sort((a, b) => a.sort - b.sort)
+      .map(({ value }) => value);
+    setOptions(shuffledArr);
+  }, []);
 
   useEffect(() => {
     if (showAnswer) {
       setAnswersIndex(getAnswersIndex(correct_response));
+      setOptions(originalOptions);
     } else {
+      const shuffledArr = originalOptions
+        .map((value) => ({ value, sort: Math.random() }))
+        .sort((a, b) => a.sort - b.sort)
+        .map(({ value }) => value);
+      setOptions(shuffledArr);
       setAnswersIndex([]);
     }
   }, [showAnswer]);
@@ -28,42 +44,27 @@ const Question = ({
     const ascii_a = 97;
     const responseIndex = [];
     for (let i = 0; i < response.length; i++) {
-      //   console.log(response[i], response[i].charCodeAt(0));
       responseIndex.push(Math.abs(ascii_a - response[i].charCodeAt(0)));
     }
     return responseIndex;
   };
-  //   const answersIndex = getAnswersIndex(correct_response);
 
   const questionTypeString = {
     "multiple-choice": "Multiple Choice",
     "multi-select": "Multi Select",
   };
 
-  const handleShowAnswerClick = (event) => {
-    event.preventDefault();
-    setShowAnswer(true);
-  };
-
   return (
     <div className="question">
       <div>{question_plain}</div>
       {!showAnswer && (
-        <div
-          href="#!"
-          onClick={(event) => setShowAnswer(true)}
-          className="toggle-answer"
-        >
+        <div onClick={() => setShowAnswer(true)} className="toggle-answer">
           Show Answer
         </div>
       )}
 
       {showAnswer && (
-        <div
-          href="#!"
-          onClick={(event) => setShowAnswer(false)}
-          className="toggle-answer"
-        >
+        <div onClick={() => setShowAnswer(false)} className="toggle-answer">
           Hide Answer
         </div>
       )}
@@ -72,10 +73,12 @@ const Question = ({
         Question Type: {questionTypeString[assessment_type]}
       </div>
       <ul>
-        {prompt.answers.map((data, index) => {
+        {options.map((data, index) => {
           return (
             <li
-              className={answersIndex.includes(index) ? "correct" : ""}
+              className={
+                answersIndex.includes(index) ? "correct answer" : "answer"
+              }
               key={index}
             >
               {strip(data)}
