@@ -1,3 +1,13 @@
-# GCP PCA Question dump
+# GCP PCA Questions FE
 
-The following repo consists of question dump from this Udemy Course - https://www.udemy.com/course/google-professional-cloud-architect-gcp-pca-exams/
+Install the dependencies
+
+```shell
+npm install
+```
+
+Run the app
+
+```shell
+npm start
+```
