@@ -106,7 +106,12 @@ const Question = ({
       )}
       {askAI && (
         <>
-          <LLMResponse question={question_plain + options.join("\n")} />
+          <LLMResponse
+            question={question_plain + options.join("\n")}
+            question_type={questionTypeString[assessment_type]}
+            correct_response={correct_response.join(", ")}
+            explanation={prompt.explanation}
+          />
           <div onClick={() => setAskAI(!askAI)} className="toggle-answer">
             Close
           </div>

@@ -5,15 +5,24 @@ import { dark } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 const serverBaseURL = "http://localhost:5000";
 
-const LLMResponse = ({ question }) => {
+const LLMResponse = ({
+  question,
+  correct_response,
+  question_type,
+  explanation,
+}) => {
   const [data, setData] = useState("");
   const hasFetchedRef = useRef(false);
 
   const prompt = `I am preparing for the Google Cloud Professional Architect exam. 
         You are a Google cloud engineer.
-        I am given the below question. ${question} Pick the correct option. 
-        Please provide detailed explanation with examples for choosing that option. 
-        Also provide explanation why you did not choose other options.`;
+        I am given the below ${question_type} question. ${question} Correct response is ${correct_response}. 
+        Please provide detailed explanation with examples why that is the correct response. 
+        Also provide explanation why you did not choose other options.
+        
+        Please have this additional explanation to aid you in providing me the answer.
+        ${explanation}
+        `;
 
   useEffect(() => {
     if (hasFetchedRef.current) return; // If API has been called, skip the effect
