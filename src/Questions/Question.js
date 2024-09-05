@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import LLMResponse from "../AskAI/LLMResponse";
 import "./Questions.css";
 
 const Question = ({
@@ -15,6 +16,7 @@ const Question = ({
 
   const [showAnswer, setShowAnswer] = useState(false);
   const [answersIndex, setAnswersIndex] = useState([]);
+  const [askAI, setAskAI] = useState(false);
   const [options, setOptions] = useState(prompt.answers);
   const originalOptions = prompt.answers;
 
@@ -93,6 +95,21 @@ const Question = ({
             dangerouslySetInnerHTML={{ __html: prompt.explanation }}
             className="explanations"
           />
+        </>
+      )}
+      {showAnswer && !askAI && (
+        <>
+          <div onClick={() => setAskAI(!askAI)} className="toggle-answer">
+            Ask AI
+          </div>
+        </>
+      )}
+      {askAI && (
+        <>
+          <LLMResponse question={question_plain + options.join("\n")} />
+          <div onClick={() => setAskAI(!askAI)} className="toggle-answer">
+            Close
+          </div>
         </>
       )}
       {related_lectures.length > 0 && (

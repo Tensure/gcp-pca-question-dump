@@ -6,18 +6,16 @@ function App() {
   const questions = getAllQuestions();
 
   return (
-    <React.Fragment>
+    <div className="container">
       <h1>Professional Cloud Architect exam dump</h1>
 
       {questions.map((data, index) => (
-        <div key={index}>
-          <div style={{ padding: 10, fontWeight: "bold" }}>
-            Question {index + 1}
-          </div>
+        <div key={index} className="questions-container">
+          <div className="question-index">Question {index + 1}</div>
           <Question {...data} />
         </div>
       ))}
-    </React.Fragment>
+    </div>
   );
 }
 
