@@ -23,57 +23,44 @@ const LLMResponse = ({
         
         Please have this additional explanation to aid you in providing me the answer.
         ${explanation}
+
+        Provide the response in markdown format.
         `;
 
   useEffect(() => {
-    if (hasFetchedRef.current) return; // If API has been called, skip the effect
+    if (hasFetchedRef.current) return;
 
     hasFetchedRef.current = true;
-    fetch(`${serverBaseURL}/api/llama`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ prompt: prompt }),
-    })
-      .then((response) => {
-        if (response.body) {
-          const reader = response.body.getReader();
-          const decoder = new TextDecoder();
-          let receivedLength = 0;
+    const xhr = new XMLHttpRequest();
 
-          return new ReadableStream({
-            start(controller) {
-              function push() {
-                reader.read().then(({ done, value }) => {
-                  if (done) {
-                    controller.close();
-                    return;
-                  }
-                  receivedLength += value.length;
-                  const chunk = decoder.decode(value, { stream: true });
-                  setData((prev) => prev + chunk);
-                  controller.enqueue(value);
-                  push();
-                });
-              }
-              push();
-            },
-          });
-        }
-      })
-      .then((stream) => new Response(stream))
-      .then((response) => response.text())
-      .then((data) => {
+    xhr.open("POST", `${serverBaseURL}/api/llama`, true);
+    xhr.setRequestHeader("Content-Type", "application/json");
+
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === 3) {
+        const response = xhr.responseText;
+        setData(response);
+      }
+    };
+
+    xhr.onload = function () {
+      if (xhr.status === 200) {
         console.log("Streaming complete");
-      })
-      .catch((error) => {
-        console.error("Streaming error:", error);
-      });
+      } else {
+        console.error("Error:", xhr.statusText);
+      }
+    };
+
+    xhr.onerror = function () {
+      console.error("Request failed");
+    };
+
+    xhr.send(JSON.stringify({ prompt: prompt }));
   }, [prompt]);
   return (
     <div>
       <h1>LLM Response</h1>
+      {data.length === 0 && <p>Loading...</p>}
       <ReactMarkdown
         children={data}
         components={{
