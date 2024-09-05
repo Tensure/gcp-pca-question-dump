@@ -16,7 +16,8 @@ const LLMResponse = ({
 
   const prompt = `I am preparing for the Google Cloud Professional Architect exam. 
         You are a Google cloud engineer.
-        I am given the below ${question_type} question. ${question} Correct response is ${correct_response}. 
+        I am given the below ${question_type} question: ${question}. 
+        Correct response is ${correct_response}. 
         Please provide detailed explanation with examples why that is the correct response. 
         Also provide explanation why you did not choose other options.
         
