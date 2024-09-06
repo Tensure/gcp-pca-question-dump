@@ -1,10 +1,8 @@
 import React from "react";
 import Question from "./Questions/Question";
+import questions from "./quizzes/test.json";
 
-import { getAllQuestions } from "./utils";
 function App() {
-  const questions = getAllQuestions();
-
   return (
     <div className="container">
       <h1>Professional Cloud Architect exam dump</h1>

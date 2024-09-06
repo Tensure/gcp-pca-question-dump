@@ -5,6 +5,8 @@ import "./Questions.css";
 const Question = ({
   question_plain,
   prompt,
+  answers,
+  explanation,
   correct_response,
   assessment_type,
   related_lectures,
@@ -17,8 +19,8 @@ const Question = ({
   const [showAnswer, setShowAnswer] = useState(false);
   const [answersIndex, setAnswersIndex] = useState([]);
   const [askAI, setAskAI] = useState(false);
-  const [options, setOptions] = useState(prompt.answers);
-  const originalOptions = prompt.answers;
+  const [options, setOptions] = useState(answers);
+  const originalOptions = answers;
 
   useEffect(() => {
     const shuffledArr = originalOptions
@@ -110,7 +112,7 @@ const Question = ({
             question={question_plain + options.join("\n")}
             question_type={questionTypeString[assessment_type]}
             correct_response={correct_response.join(", ")}
-            explanation={prompt.explanation}
+            explanation={explanation}
           />
           <div onClick={() => setAskAI(!askAI)} className="toggle-answer">
             Close
