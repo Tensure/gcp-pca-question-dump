@@ -32,10 +32,6 @@ def query_ollama():
     return Response(
         stream_with_context(generate()),
         content_type="text/event-stream",
-        headers={
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Credentials": "true",
-        },
     )
 
 
